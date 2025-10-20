@@ -1,0 +1,16 @@
+# Pasta do Ambiente Virtual
+venv/
+*.pyc
+
+# Django
+__pycache__/
+
+# Arquivo de Banco de Dados de Desenvolvimento
+db.sqlite3
+
+# Arquivos de Mídia (Uploads)
+media/
+
+# Variáveis de Ambiente e Chaves de Segurança
+.env
+.vscode/
