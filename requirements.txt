@@ -135,7 +135,7 @@ poetry-core==2.1.1
 prometheus_client==0.23.1
 prompt_toolkit==3.0.50
 psutil==7.0.0
-psycopg2==2.9.11
+psycopg2-binary==2.9.9
 pure_eval==0.2.3
 PyAutoGUI==0.9.54
 pycodestyle==2.12.1
