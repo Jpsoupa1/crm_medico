@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Upload de Arquivo{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/form_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+{% comment %}
+    Determina o tipo de upload baseado no formulário.
+    A view de foto tem 'foto' e a view de PDF tem 'pdf_file'.
+{% endcomment %}
+{% with is_photo=form.foto|default:False %}
+{% with is_pdf=form.pdf_file|default:False %}
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card card-shadow form-card p-4">
+            <div class="card-header bg-primary text-white rounded-top-2">
+                <h4 class="mb-0 text-center">
+                    {% if is_photo %}
+                        <i class="fas fa-camera me-2"></i> Upload de Nova Foto
+                    {% elif is_pdf %}
+                        <i class="fas fa-file-upload me-2"></i> Upload de Novo Documento (PDF)
+                    {% else %}
+                        Upload de Arquivo
+                    {% endif %}
+                </h4>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    {% for field in form %}
+                        {% comment %} Exclui o campo paciente, que e preenchido pela view {% endcomment %}
+                        {% if field.name not in 'paciente' %} 
+                            <div class="mb-3">
+                                <label for="{{ field.id_for_label }}" class="form-label fw-bold">{{ field.label }}</label>
+                                {{ field }} 
+                                {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+                                {% for error in field.errors %}<div class="alert alert-danger mt-1 p-2">{{ error }}</div>{% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    <div class="form-actions d-flex justify-content-between mt-4">
+                        {% comment %} Volta para a pagina de detalhes usando a PK passada na URL (view.kwargs.pk) {% endcomment %}
+                        <a href="{% url 'detalhe_paciente' pk=view.kwargs.pk %}" class="btn btn-secondary"><i class="fas fa-times me-2"></i> Cancelar</a>
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="fas fa-check-circle me-2"></i> Fazer Upload
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endwith %}
+{% endwith %}
+{% endblock content %}

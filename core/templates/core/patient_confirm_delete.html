@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Deletar Paciente{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/form_detail.css' %}">
+    <style>
+        .delete-card {
+            border-left: 5px solid #dc3545; /* Borda vermelha de alerta */
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7 col-lg-5">
+        <div class="card card-shadow delete-card p-4">
+            <div class="card-header bg-danger text-white rounded-top-2">
+                <h4 class="mb-0 text-center"><i class="fas fa-exclamation-triangle me-2"></i> Confirmação de Deleção</h4>
+            </div>
+            <div class="card-body">
+                <p class="lead text-center mt-3">Tem **certeza** de que deseja deletar permanentemente o paciente:</p>
+                <h3 class="text-danger text-center mb-4">{{ object.nome_completo }}?</h3>
+                
+                <p class="text-muted text-center small">
+                    Esta ação é **irreversível** e todos os dados, documentos e imagens associados a este paciente serão apagados do sistema.
+                </p>
+                
+                <form method="POST" class="mt-4">
+                    {% csrf_token %}
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'detalhe_paciente' pk=object.pk %}" class="btn btn-secondary btn-lg"><i class="fas fa-arrow-left me-2"></i> Cancelar</a>
+                        <button type="submit" class="btn btn-danger btn-lg">
+                            <i class="fas fa-trash-alt me-2"></i> Confirmar Deleção
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

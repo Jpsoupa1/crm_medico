@@ -1,0 +1,24 @@
+/* static/css/dashboard.css */
+
+/* Tabela de Pacientes */
+.patient-table th {
+    background-color: #eef2ff; /* Fundo mais claro */
+    color: #374151;
+    font-weight: 600;
+}
+
+.patient-row {
+    transition: background-color 0.2s ease-in-out;
+}
+
+.patient-row:hover {
+    background-color: #f8fafc;
+    cursor: pointer;
+}
+
+/* Estilo do cabeçalho do Dashboard */
+.dashboard-header {
+    border-bottom: 2px solid #eef2ff;
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+}

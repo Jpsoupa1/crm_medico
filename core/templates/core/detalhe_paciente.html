@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Detalhes de {{ paciente.nome_completo }}{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/form_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12 d-flex justify-content-between align-items-center">
+        <h1 class="text-primary"><i class="fas fa-user-injured me-2"></i> Perfil do Paciente</h1>
+        <div class="btn-group" role="group">
+            <a href="{% url 'editar_paciente' pk=paciente.pk %}" class="btn btn-warning me-2"><i class="fas fa-edit me-1"></i> Editar Dados</a>
+            <a href="{% url 'deletar_paciente' pk=paciente.pk %}" class="btn btn-danger"><i class="fas fa-trash-alt me-1"></i> Deletar Paciente</a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-5 mb-4">
+        <div class="card card-shadow detail-info-card">
+            <div class="card-header"><i class="fas fa-info-circle me-2"></i> Detalhes do Paciente</div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>Nome:</strong> {{ paciente.nome_completo }}</li>
+                <li class="list-group-item"><strong>Data Nasc.:</strong> {{ paciente.data_nascimento|date:"d/m/Y" }}</li>
+                <li class="list-group-item"><strong>Telefone:</strong> <i class="fas fa-phone-alt me-1"></i> {{ paciente.telefone|default:"N/A" }}</li>
+                <li class="list-group-item"><strong>Email:</strong> <i class="fas fa-envelope me-1"></i> {{ paciente.email|default:"N/A" }}</li>
+                <li class="list-group-item"><strong>Médico Resp.:</strong> {{ paciente.medico.get_full_name|default:paciente.medico.username }}</li>
+                <li class="list-group-item"><strong>Registo no Sistema:</strong> {{ paciente.data_registro|date:"d/m/Y H:i" }}</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="col-lg-7 mb-4">
+        <div class="card card-shadow detail-info-card h-100">
+            <div class="card-header"><i class="fas fa-clipboard-list me-2"></i> Notas Clínicas</div>
+            <div class="card-body">
+                <h6>**Histórico Médico:**</h6>
+                <p class="text-muted fst-italic">{{ paciente.historico_medico|default:"(Não registado)"|linebreaksbr }}</p>
+                <hr>
+                <h6>**Alergias:**</h6>
+                <p class="text-muted fst-italic">{{ paciente.alergias|default:"(Não registado)"|linebreaksbr }}</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-12 mb-4">
+        <div class="card card-shadow">
+            <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-file-pdf me-2"></i> Documentos PDF</h5>
+                <a href="{% url 'upload_pdf' pk=paciente.pk %}" class="btn btn-sm btn-light">
+                    <i class="fas fa-upload me-1"></i> Adicionar PDF
+                </a>
+            </div>
+            <div class="card-body">
+                {% if pdfs %}
+                    <ul class="list-group">
+                        {% for pdf in pdfs %}
+                        <li class="list-group-item document-list-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="far fa-file-pdf text-danger me-2"></i> 
+                                **{{ pdf.nome_documento }}** (Upload: {{ pdf.data_upload|date:"d/m/Y" }})
+                            </div>
+                            <a href="{{ pdf.pdf_file.url }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye me-1"></i> Ver
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-muted text-center"><i class="fas fa-exclamation-circle me-2"></i> Nenhum documento PDF registado.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-12 mb-4">
+        <div class="card card-shadow">
+            <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-camera me-2"></i> Galeria de Imagens</h5>
+                <a href="{% url 'upload_foto' pk=paciente.pk %}" class="btn btn-sm btn-light">
+                    <i class="fas fa-upload me-1"></i> Adicionar Foto
+                </a>
+            </div>
+            <div class="card-body image-gallery">
+                {% if fotos %}
+                    <div class="row">
+                        {% for foto in fotos %}
+                            <div class="col-md-3 col-sm-6 mb-3">
+                                <div class="card h-100">
+                                    <a href="{{ foto.foto.url }}" target="_blank">
+                                        <img src="{{ foto.foto.url }}" class="card-img-top" alt="{{ foto.descricao }}" style="height: 180px; object-fit: cover;">
+                                    </a>
+                                    <div class="card-body p-2">
+                                        <p class="card-text mb-1 text-center text-muted small">{{ foto.descricao|default:"(Sem descrição)" }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted text-center"><i class="fas fa-exclamation-circle me-2"></i> Nenhuma foto registada.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
